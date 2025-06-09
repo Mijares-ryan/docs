@@ -1,3 +1,4 @@
+import { Tooltip } from '@openfun/cunningham-react';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 
@@ -12,7 +13,6 @@ import {
   useTrans,
 } from '@/docs/doc-management';
 import { useResponsiveStore } from '@/stores';
-import { Tooltip } from '@openfun/cunningham-react';
 
 import { AlertNetwork } from './AlertNetwork';
 import { AlertPublic } from './AlertPublic';
@@ -30,7 +30,7 @@ const estimateReadTime = (wordCount: number): string => {
   const wordsPerMinute = 200; // Average reading speed
   const minutes = Math.ceil(wordCount / wordsPerMinute);
   return minutes > 0 ? `${minutes} min read` : 'Less than a minute';
-}
+};
 
 export const DocHeader = ({ doc }: DocHeaderProps) => {
   const { spacingsTokens } = useCunninghamTheme();
@@ -41,7 +41,7 @@ export const DocHeader = ({ doc }: DocHeaderProps) => {
   const docIsPublic = doc.link_reach === LinkReach.PUBLIC;
   const docIsAuth = doc.link_reach === LinkReach.AUTHENTICATED;
 
-  const wordCount = countWords(doc.content); 
+  const wordCount = countWords(doc.content);
   const readTime = estimateReadTime(wordCount);
 
   return (
@@ -74,7 +74,7 @@ export const DocHeader = ({ doc }: DocHeaderProps) => {
             <Box $gap={spacingsTokens['3xs']} $overflow="auto">
               <DocTitle doc={doc} />
 
-              <Box $direction="row" $gap="xs" $align="center">
+              <Box $direction="row">
                 {isDesktop && (
                   <>
                     <Text
@@ -95,20 +95,19 @@ export const DocHeader = ({ doc }: DocHeaderProps) => {
                         update: DateTime.fromISO(doc.updated_at).toRelative(),
                       })}
                     </Text>
-                    {wordCount > 0 && (
-                      <>
-                        <Tooltip content={readTime} placement="top">
-                          <Text
-                            $variation="600"
-                            $size="s"
-                            className="--docs--doc-wordcount"
-                            $theme="greyscale"
-                          >
-                            {t('{{count}} words', { count: wordCount })}
-                          </Text>
-                        </Tooltip>
-                      </>
-                    )}
+                    <Text>
+                      <Tooltip content={readTime} placement="bottom">
+                        <Text
+                          $variation="600"
+                          $size="s"
+                          className="--docs--doc-wordcount"
+                          $theme="greyscale"
+                        >
+                          &nbsp;·&nbsp;
+                          {t('{{count}} words', { count: wordCount })}
+                        </Text>
+                      </Tooltip>
+                    </Text>
                   </>
                 )}
                 {!isDesktop && (
